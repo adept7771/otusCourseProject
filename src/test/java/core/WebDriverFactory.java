@@ -53,7 +53,7 @@ public class WebDriverFactory {
 
     public static Platform recognizePlatform(String incomingBrowserName){
         if(incomingBrowserName == null){
-            return Platform.firefox;
+            return Platform.chrome;
         }
         String browserName = incomingBrowserName.toLowerCase();
         if(browserName.contains("chrome")){
@@ -66,7 +66,7 @@ public class WebDriverFactory {
             return Platform.selenoid;
         }
         else {
-            return Platform.firefox;
+            return Platform.chrome;
         }
     }
 }

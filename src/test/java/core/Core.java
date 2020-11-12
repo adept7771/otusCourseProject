@@ -2,21 +2,20 @@ package core;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import static core.DriverManager.getWebDriver;
 import static core.DriverManager.setupDriver;
 
-public abstract class TestsCore {
+public abstract class Core {
 
-    private static Logger logger = LogManager.getLogger(TestsCore.class);
+    private static Logger logger = LogManager.getLogger(Core.class);
 
     public void getUrl(String url) {
         try {
@@ -117,6 +116,7 @@ public abstract class TestsCore {
     private WebElement waitBy(long timeToWait, By by) {
         WebDriverWait wait = new WebDriverWait(getWebDriver(), timeToWait);
         wait.withMessage("WebElement can't be found by: " + by);
+        logger.info("Ждем элемент: " + by);
         wait.until(ExpectedConditions.visibilityOfElementLocated(by));
         int maxWaitForAvoidStaleElementException = (int) timeToWait;
         for (int i = 0; i < maxWaitForAvoidStaleElementException; i++) {
@@ -235,5 +235,15 @@ public abstract class TestsCore {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @BeforeAll
+    public static void setup(){
+        DriverManager.setupDriver();
+    }
+
+    @AfterAll
+    public static void tearDown(){
+        DriverManager.tearDownDriver();
     }
 }
