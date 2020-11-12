@@ -27,13 +27,6 @@ public abstract class Core {
         }
     }
 
-    public void scrollToElement(long timeToWait, String xpath) {
-        getReadyState();
-        WebDriverWait wait = new WebDriverWait(getWebDriver(), timeToWait);
-        WebElement webElement = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
-        ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].scrollIntoView(true);", webElement);
-    }
-
     public String getText(By by) {
         WebElement webElement = waitBy(10, by);
         if (webElement == null) {
@@ -50,8 +43,7 @@ public abstract class Core {
         WebElement webElement = waitBy(10, by);
         if (webElement == null) {
             return null;
-        }
-        else {
+        } else {
             return webElement.getAttribute(attribute);
         }
     }
@@ -131,40 +123,18 @@ public abstract class Core {
         return null;
     }
 
-    public WebElement findElement(String xpath, long timeToWait) {
+    public List<WebElement> findAllWebElements(long timeToWait, By by) {
         getReadyState();
-        logger.info("Ждем элемент по xpath: " + xpath);
         WebDriverWait wait = new WebDriverWait(getWebDriver(), timeToWait);
-        wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(xpath)));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
-        int maxWaitForAvoidStaleElementException = (int) timeToWait;
-        for (int i = 0; i < maxWaitForAvoidStaleElementException; i++) {
-            try {
-                return getWebDriver().findElement(By.xpath(xpath));
-            } catch (StaleElementReferenceException e) {
-                waitStatic(1000);
-                continue;
-            }
+        if (waitBy(timeToWait, by) == null) {
+            return null;
+        } else {
+            return getWebDriver().findElements(by);
         }
-        return null;
     }
 
-    public List<WebElement> findAllWebElements(long timeToWait, String xpath) {
-        getReadyState();
-        WebDriverWait wait = new WebDriverWait(getWebDriver(), timeToWait);
-        logger.info("Поиск всех элементов по пути: " + xpath);
-        int maxWaitForAvoidStaleElementException = (int) timeToWait;
-        for (int i = 0; i < maxWaitForAvoidStaleElementException; i++) {
-            try {
-                wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(xpath)));
-                wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath(xpath)));
-                return getWebDriver().findElements(By.xpath(xpath));
-            } catch (StaleElementReferenceException e) {
-                waitStatic(1000);
-                continue;
-            }
-        }
-        return null;
+    public List<WebElement> findAllWebElements(By by) {
+        return findAllWebElements(10L, by);
     }
 
     public String getText(long timeToWait, By by) {
@@ -175,24 +145,6 @@ public abstract class Core {
             return waitBy(timeToWait, by).getText();
         } catch (NullPointerException e) {
             return null;
-        }
-    }
-
-    public List<WebElement> findAllWebElements(String xpath) {
-        return findAllWebElements(10L, xpath);
-    }
-
-    public boolean isElementVisible(String xpath, long timeToWait) {
-        getReadyState();
-        WebDriverWait wait = new WebDriverWait(getWebDriver(), timeToWait);
-        try {
-            waitStatic((int) timeToWait);
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
-            return true;
-        } catch (ElementNotVisibleException e) {
-            return false;
-        } catch (TimeoutException e) {
-            return false;
         }
     }
 
@@ -238,12 +190,12 @@ public abstract class Core {
     }
 
     @BeforeAll
-    public static void setup(){
+    public static void setup() {
         DriverManager.setupDriver();
     }
 
     @AfterAll
-    public static void tearDown(){
+    public static void tearDown() {
         DriverManager.tearDownDriver();
     }
 }
