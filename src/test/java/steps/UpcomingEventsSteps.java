@@ -2,8 +2,14 @@ package steps;
 
 import core.Core;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.openqa.selenium.WebElement;
 import pageObjects.UpcomingEventsPage;
 
+import java.util.ArrayList;
+
+@Execution(ExecutionMode.CONCURRENT)
 public class UpcomingEventsSteps extends Core {
 
     UpcomingEventsPage upcomingEventsPage = new UpcomingEventsPage();
@@ -29,5 +35,14 @@ public class UpcomingEventsSteps extends Core {
         Assertions.assertEquals(eventCardsAmount, findAllWebElements(upcomingEventsPage.eventDateCell).size());
         Assertions.assertEquals(eventCardsAmount, findAllWebElements(upcomingEventsPage.eventRegistrationStatus).size());
         Assertions.assertEquals(eventCardsAmount, findAllWebElements(upcomingEventsPage.eventSpeakers).size());
+    }
+
+    public void getAllEventsMonthsAsStringAndCompareWithMonthName(String monthNameInMMMFormat) {
+        for (WebElement webElement : findAllWebElements(upcomingEventsPage.eventDateCell)){
+            Assertions.assertEquals(
+                    webElement.getText().replaceAll("[^A-Za-z]+", ""),
+                    monthNameInMMMFormat,
+                    "Month of element is not equals to current system month");
+        }
     }
 }

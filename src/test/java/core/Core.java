@@ -4,6 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -13,6 +15,7 @@ import java.util.List;
 import static core.DriverManager.getWebDriver;
 import static core.DriverManager.setupDriver;
 
+@Execution(ExecutionMode.CONCURRENT)
 public abstract class Core {
 
     private static Logger logger = LogManager.getLogger(Core.class);
