@@ -17,4 +17,9 @@ public class GlobalNavigationSteps extends Core {
         clickWithWait(new HeaderBlock().eventsButton);
         clickWithWait(new EventsPage().upcomingEventsLink);
     }
+
+    public void navigateToPastEvents(){
+        clickWithWait(new HeaderBlock().eventsButton);
+        clickWithWait(new EventsPage().pastEventsLink);
+    }
 }

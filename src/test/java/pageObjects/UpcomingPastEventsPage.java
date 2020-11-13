@@ -2,10 +2,14 @@ package pageObjects;
 
 import org.openqa.selenium.By;
 
-public class UpcomingEventsPage {
+public class UpcomingPastEventsPage {
 
-    public By upcomingEventsCounter = By.xpath("//a[@class='evnt-tab-link nav-link active']//span[@class='evnt-tab-counter evnt-label small white']");
+    public By currentEventTapEventsCounter = By.xpath("//a[@class='evnt-tab-link nav-link active']//span[@class='evnt-tab-counter evnt-label small white']");
     public By eventDetailsCell = By.xpath("//div[@class='evnt-details-cell online-cell']");
+
+    public By locationDropdown = By.xpath("//div[@id='filter_location']");
+    public By canadaInDropdown = By.xpath("//label[@data-value='Canada']");
+    public By allEventsH3Header = By.xpath("//h3[text()='All Events']");
 
 
     // для проверки порядка верстки элементов используется конструкция c порядковым номером div, и названием класса
