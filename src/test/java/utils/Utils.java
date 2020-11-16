@@ -1,5 +1,9 @@
 package utils;
 
+import core.Core;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -8,10 +12,14 @@ import java.util.Locale;
 
 public class Utils {
 
+    private static Logger logger = LogManager.getLogger(Utils.class);
+
     public static String getSystemVariableValue(String variableName){
         try {
+            logger.info("System variable: " + variableName + " is: " + System.getProperty("browser"));
             return System.getProperty("browser");
         } catch (Exception e) {
+            logger.info("Can't get system variable: " + variableName);
             return null;
         }
     }

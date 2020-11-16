@@ -229,9 +229,7 @@ public abstract class Core {
 
     @BeforeAll
     public static void setupDriver() {
-
         Platform platform = WebDriverFactory.recognizePlatform(Utils.getSystemVariableValue("browser"));
-
         if(platform.equals(Platform.selenoid)){
             DesiredCapabilities caps = new DesiredCapabilities();
             caps.setBrowserName("chrome");
@@ -261,6 +259,7 @@ public abstract class Core {
         if (webDriver != null) {
             logger.info("Драйвер выключен");
             webDriver.quit();
+            webDriver = null;
             return;
         }
         logger.info("Драйвер уже выключен, дополнительное отключение не требуется");

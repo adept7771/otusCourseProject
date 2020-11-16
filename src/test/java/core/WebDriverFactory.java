@@ -53,20 +53,25 @@ public class WebDriverFactory {
 
     public static Platform recognizePlatform(String incomingBrowserName){
         if(incomingBrowserName == null){
+            logger.info("Chrome browser by default.");
             return Platform.chrome;
         }
         String browserName = incomingBrowserName.toLowerCase();
         if(browserName.contains("chrome")){
+            logger.info("Chrome recognized from system variable.");
             return Platform.chrome;
         }
         if(browserName.contains("opera")){
+            logger.info("Opera recognized from system variable.");
             return Platform.opera;
         }
         if(browserName.contains("selenoid")){
+            logger.info("Selenoid recognized from system variable.");
             return Platform.selenoid;
         }
         else {
-            return Platform.chrome;
+            logger.info("Firefox recognized from system variable.");
+            return Platform.firefox;
         }
     }
 }
