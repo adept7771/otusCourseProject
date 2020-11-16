@@ -3,24 +3,24 @@ package core;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.openqa.selenium.*;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.Utils;
 
+import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import static core.DriverManager.getWebDriver;
-import static core.DriverManager.setupDriver;
-
-@Execution(ExecutionMode.CONCURRENT)
+//@Execution(ExecutionMode.CONCURRENT)
 public abstract class Core {
-
-    private static Logger logger = LogManager.getLogger(Core.class);
 
     public void getUrl(String url) {
         try {
@@ -217,19 +217,59 @@ public abstract class Core {
     }
 
     public void goBack(){
-        JavascriptExecutor js = (JavascriptExecutor) DriverManager.getWebDriver();
+        JavascriptExecutor js = (JavascriptExecutor) getWebDriver();
         js.executeScript("window.history.go(-1)");
     }
 
+    // ==========================================================================
+    // ==========================================================================
 
+    private static WebDriver webDriver;
+    private static Logger logger = LogManager.getLogger(Core.class);
 
     @BeforeAll
-    public static void setup() {
-        DriverManager.setupDriver();
+    public static void setupDriver() {
+
+        Platform platform = WebDriverFactory.recognizePlatform(Utils.getSystemVariableValue("browser"));
+
+        if(platform.equals(Platform.selenoid)){
+            DesiredCapabilities caps = new DesiredCapabilities();
+            caps.setBrowserName("chrome");
+            caps.setVersion("86.0");
+            caps.setCapability("enableVNC", true);
+            caps.setCapability("screenResolution", "1280x1024");
+            caps.setCapability("enableVideo", true);
+            caps.setCapability("enableLog", true);
+            try {
+                webDriver = WebDriverFactory.createDriver(platform, null,
+                        caps, "http://localhost:4444/wd/hub");
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            try {
+                webDriver = WebDriverFactory.createDriver(platform, null, null, null);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @AfterAll
-    public static void tearDown() {
-        DriverManager.tearDownDriver();
+    public static void tearDownDriver() {
+        if (webDriver != null) {
+            logger.info("Драйвер выключен");
+            webDriver.quit();
+            return;
+        }
+        logger.info("Драйвер уже выключен, дополнительное отключение не требуется");
+    }
+
+    public static WebDriver getWebDriver() {
+        if (webDriver == null) {
+            setupDriver();
+        }
+        return webDriver;
     }
 }
