@@ -45,6 +45,10 @@ public class UpcomingPastEventsSteps extends Core {
         Assertions.assertEquals(eventCardsAmount, findAllWebElements(upcomingPastEventsPage.eventSpeakers).size());
     }
 
+    public void goToFirstEvent() {
+        clickWithWait(upcomingPastEventsPage.eventHeadingCell);
+    }
+
     public void getAllEventsMonthsAsStringAndCompareWithMonthName(String monthNameInMMMFormat) {
         for (WebElement webElement : findAllWebElements(upcomingPastEventsPage.eventDateCell)) {
             Assertions.assertEquals(

@@ -22,4 +22,8 @@ public class GlobalNavigationSteps extends Core {
         clickWithWait(new HeaderBlock().eventsButton);
         clickWithWait(new EventsPage().pastEventsLink);
     }
+
+    public void navigateToVideoBlock(){
+        clickWithWait(new HeaderBlock().videoButton);
+    }
 }

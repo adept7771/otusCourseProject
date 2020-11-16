@@ -7,14 +7,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import steps.GlobalNavigationSteps;
+import steps.SingleEventSteps;
 import steps.UpcomingPastEventsSteps;
+import steps.AllVideosPageSteps;
 import utils.Utils;
 
 @Execution(ExecutionMode.CONCURRENT)
 public class Tests extends Core {
-
-    GlobalNavigationSteps globalNavigationSteps = new GlobalNavigationSteps();
-    UpcomingPastEventsSteps upcomingPastEventsSteps = new UpcomingPastEventsSteps();
 
     @Test
     @DisplayName(value = "Upcoming events check test")
@@ -55,4 +54,57 @@ public class Tests extends Core {
         Assertions.assertTrue(upcomingPastEventsSteps
                 .isAllEventsInPastToCurrentDate(Utils.getSystemDateIn_dd_MMM_yyyy()));
     }
+
+    @Test
+    @DisplayName(value = "Detailed event info checks")
+    public void fifthTest() {
+        globalNavigationSteps.openMainPage();
+        globalNavigationSteps.navigateToUpcomingEvents();
+        upcomingPastEventsSteps.goToFirstEvent();
+        singleEventSteps.checkMainEventBlocksAreExists();
+    }
+
+    @Test
+    @DisplayName(value = "Video Filtration testing")
+    public void sixthTest() {
+        globalNavigationSteps.openMainPage();
+        globalNavigationSteps.navigateToVideoBlock();
+        allVideosPageSteps.openCloseMoreFilters();
+        allVideosPageSteps.chooseLanguageEnglish();
+        allVideosPageSteps.chooseLocationBelarus();
+        allVideosPageSteps.chooseTestingCategory();
+        allVideosPageSteps.openCloseMoreFilters();
+        Assertions.assertEquals(
+                allVideosPageSteps.countNumberOfLanguageIcons(),
+                allVideosPageSteps.countNumberOfVideoHeadings(),
+                "Number of events doesn't equal to number of language icons");
+        allVideosPageSteps.checkEachVideoOnPage();
+    }
+
+    GlobalNavigationSteps globalNavigationSteps = new GlobalNavigationSteps();
+    UpcomingPastEventsSteps upcomingPastEventsSteps = new UpcomingPastEventsSteps();
+    SingleEventSteps singleEventSteps = new SingleEventSteps();
+    AllVideosPageSteps allVideosPageSteps = new AllVideosPageSteps();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
