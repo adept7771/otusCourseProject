@@ -19,5 +19,7 @@ public class AllVideosPage {
     public By videoEventIcon = By.xpath("//p[@class='video']");
 
     public By eventHeading = By.xpath("//div[@class='evnt-talk-name']//span");
+    public By searchInput = By.xpath("//div[@class='evnt-search-filter']/input[@class='evnt-text-fields form-control evnt-search']");
 
+    public By preloader = By.xpath("//div[@class='evnt-loader']");
 }

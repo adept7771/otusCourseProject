@@ -67,4 +67,18 @@ public class AllVideosPageSteps extends Core {
             goBack();
         }
     }
+
+    public void findVideo(String nameForVideo){
+        clickWithWait(allVideosPage.searchInput);
+        sendKeys(allVideosPage.searchInput, nameForVideo);
+        waitUntilNotExists(allVideosPage.preloader, 10L);
+    }
+
+    public void validateAllVideosContainsText(String textToCheck){
+        ArrayList<WebElement> listOfVideos = (ArrayList<WebElement>) findAllWebElements(allVideosPage.eventHeading);
+        for(WebElement webElement : listOfVideos){
+            Assertions.assertTrue(webElement.getText().toLowerCase().contains(textToCheck.toLowerCase()),
+                    "Video event doesn't contains mentioned text: " + webElement.getText().toLowerCase());
+        }
+    }
 }

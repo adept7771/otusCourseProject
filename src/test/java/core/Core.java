@@ -167,6 +167,17 @@ public abstract class Core {
         }
     }
 
+    public void waitUntilNotExists(By by, long timeToWait){
+        while (timeToWait != 0){
+            if(isElementExists(by, 1L)){
+                timeToWait -= 1;
+            }
+            else {
+                return;
+            }
+        }
+    }
+
     public boolean isElementExists(By by, long timeToWait) {
         getReadyState();
         WebDriverWait wait = new WebDriverWait(getWebDriver(), timeToWait);
@@ -209,6 +220,8 @@ public abstract class Core {
         JavascriptExecutor js = (JavascriptExecutor) DriverManager.getWebDriver();
         js.executeScript("window.history.go(-1)");
     }
+
+
 
     @BeforeAll
     public static void setup() {

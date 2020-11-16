@@ -20,7 +20,8 @@ public class Tests extends Core {
     public void firstTest() {
         globalNavigationSteps.openMainPage();
         globalNavigationSteps.navigateToUpcomingEvents();
-        Assertions.assertEquals(upcomingPastEventsSteps.getChosenTabEventCounterValue(), upcomingPastEventsSteps.getUpcomingEventsCardsCount(),
+        Assertions.assertEquals(upcomingPastEventsSteps.getChosenTabEventCounterValue(),
+                upcomingPastEventsSteps.getUpcomingEventsCardsCount(),
                 "There are difference while comparing event counter and event cards");
     }
 
@@ -49,7 +50,8 @@ public class Tests extends Core {
         globalNavigationSteps.openMainPage();
         globalNavigationSteps.navigateToPastEvents();
         upcomingPastEventsSteps.chooseCanada();
-        Assertions.assertEquals(upcomingPastEventsSteps.getChosenTabEventCounterValue(), upcomingPastEventsSteps.getPastEventsCardsCount(),
+        Assertions.assertEquals(upcomingPastEventsSteps.getChosenTabEventCounterValue(),
+                upcomingPastEventsSteps.getPastEventsCardsCount(),
                 "There are difference while comparing event counter and event cards");
         Assertions.assertTrue(upcomingPastEventsSteps
                 .isAllEventsInPastToCurrentDate(Utils.getSystemDateIn_dd_MMM_yyyy()));
@@ -79,6 +81,15 @@ public class Tests extends Core {
                 allVideosPageSteps.countNumberOfVideoHeadings(),
                 "Number of events doesn't equal to number of language icons");
         allVideosPageSteps.checkEachVideoOnPage();
+    }
+
+    @Test
+    @DisplayName(value = "Find video reports testing")
+    public void seventhTest() {
+        globalNavigationSteps.openMainPage();
+        globalNavigationSteps.navigateToVideoBlock();
+        allVideosPageSteps.findVideo("QA");
+        allVideosPageSteps.validateAllVideosContainsText("QA");
     }
 
     GlobalNavigationSteps globalNavigationSteps = new GlobalNavigationSteps();
