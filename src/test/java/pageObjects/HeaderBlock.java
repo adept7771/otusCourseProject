@@ -1,6 +1,5 @@
 package pageObjects;
 
-import core.Core;
 import org.openqa.selenium.By;
 
 public class HeaderBlock {

@@ -1,9 +1,7 @@
 package tests;
 
 import core.Core;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import steps.GlobalNavigationSteps;
@@ -13,9 +11,9 @@ import steps.AllVideosPageSteps;
 import utils.Utils;
 
 @Execution(ExecutionMode.CONCURRENT)
-public class Tests extends Core {
+public class Test extends Core {
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName(value = "Upcoming events check test")
     public void firstTest() {
         globalNavigationSteps.openMainPage();
@@ -25,7 +23,7 @@ public class Tests extends Core {
                 "There are difference while comparing event counter and event cards");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName(value = "Event cards check test")
     public void secondTest() {
         globalNavigationSteps.openMainPage();
@@ -36,7 +34,7 @@ public class Tests extends Core {
 
     // у меня блока this week нет. Поэтому я проверяю, что все мероприятия проводятся в ЭТОМ месяце
     // то есть соответствуют системному месяцу на текущем пк
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName(value = "Event date validation test")
     public void thirdTest() {
         globalNavigationSteps.openMainPage();
@@ -44,7 +42,7 @@ public class Tests extends Core {
         upcomingPastEventsSteps.getAllEventsMonthsAsStringAndCompareWithMonthName(Utils.getSystemMonthInMMMFormat());
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName(value = "Canada events dates validation")
     public void fourthTest() {
         globalNavigationSteps.openMainPage();
@@ -57,7 +55,7 @@ public class Tests extends Core {
                 .isAllEventsInPastToCurrentDate(Utils.getSystemDateIn_dd_MMM_yyyy()));
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName(value = "Detailed event info checks")
     public void fifthTest() {
         globalNavigationSteps.openMainPage();
@@ -66,7 +64,7 @@ public class Tests extends Core {
         singleEventSteps.checkMainEventBlocksAreExists();
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName(value = "Video Filtration testing")
     public void sixthTest() {
         globalNavigationSteps.openMainPage();
@@ -83,7 +81,7 @@ public class Tests extends Core {
         allVideosPageSteps.checkEachVideoOnPage();
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName(value = "Find video reports testing")
     public void seventhTest() {
         globalNavigationSteps.openMainPage();

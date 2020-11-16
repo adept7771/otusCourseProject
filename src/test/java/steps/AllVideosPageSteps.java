@@ -1,12 +1,9 @@
 package steps;
 
 import core.Core;
-import core.DriverManager;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import pageObjects.AllVideosPage;
 import pageObjects.SingleVideoPage;
