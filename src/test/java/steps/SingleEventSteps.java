@@ -4,12 +4,17 @@ import core.Core;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.openqa.selenium.WebDriver;
 import pageObjects.SingleEventPage;
 
-@Execution(ExecutionMode.CONCURRENT)
+
 public class SingleEventSteps extends Core {
 
     SingleEventPage singleEventPage = new SingleEventPage();
+
+    public SingleEventSteps(WebDriver webDriver) {
+        super(webDriver);
+    }
 
     public void checkMainEventBlocksAreExists(){
         Assertions.assertTrue(isElementVisible(singleEventPage.dateButton, 10L));

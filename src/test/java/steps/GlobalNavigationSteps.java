@@ -3,11 +3,16 @@ package steps;
 import core.Core;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.openqa.selenium.WebDriver;
 import pageObjects.EventsPage;
 import pageObjects.HeaderBlock;
 
-@Execution(ExecutionMode.CONCURRENT)
+
 public class GlobalNavigationSteps extends Core {
+
+    public GlobalNavigationSteps(WebDriver webDriver) {
+        super(webDriver);
+    }
 
     public void openMainPage(){
         getUrl("https://events.epam.com/");

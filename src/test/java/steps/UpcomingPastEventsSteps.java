@@ -4,6 +4,7 @@ import core.Core;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import pageObjects.UpcomingPastEventsPage;
 
@@ -12,10 +13,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-@Execution(ExecutionMode.CONCURRENT)
+
 public class UpcomingPastEventsSteps extends Core {
 
     UpcomingPastEventsPage upcomingPastEventsPage = new UpcomingPastEventsPage();
+
+    public UpcomingPastEventsSteps(WebDriver webDriver) {
+        super(webDriver);
+    }
 
     public int getUpcomingEventsCardsCount() {
         return (findAllWebElements(upcomingPastEventsPage.eventDetailsCell) == null) ? 0 :

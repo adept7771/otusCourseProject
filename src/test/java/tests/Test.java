@@ -1,6 +1,7 @@
 package tests;
 
 import core.Core;
+import core.JunitRunner;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
@@ -11,13 +12,15 @@ import steps.AllVideosPageSteps;
 import utils.Utils;
 
 @Execution(ExecutionMode.CONCURRENT)
-public class Test extends Core {
+public class Test extends JunitRunner {
 
     @org.junit.jupiter.api.Test
     @DisplayName(value = "Upcoming events check test")
     public void firstTest() {
+        GlobalNavigationSteps globalNavigationSteps = new GlobalNavigationSteps(webDriver);
         globalNavigationSteps.openMainPage();
         globalNavigationSteps.navigateToUpcomingEvents();
+        UpcomingPastEventsSteps upcomingPastEventsSteps = new UpcomingPastEventsSteps(webDriver);
         Assertions.assertEquals(upcomingPastEventsSteps.getChosenTabEventCounterValue(),
                 upcomingPastEventsSteps.getUpcomingEventsCardsCount(),
                 "There are difference while comparing event counter and event cards");
@@ -26,8 +29,10 @@ public class Test extends Core {
     @org.junit.jupiter.api.Test
     @DisplayName(value = "Event cards check test")
     public void secondTest() {
+        GlobalNavigationSteps globalNavigationSteps = new GlobalNavigationSteps(webDriver);
         globalNavigationSteps.openMainPage();
         globalNavigationSteps.navigateToUpcomingEvents();
+        UpcomingPastEventsSteps upcomingPastEventsSteps = new UpcomingPastEventsSteps(webDriver);
         int countOfEventCards = upcomingPastEventsSteps.getUpcomingEventsCardsCount();
         upcomingPastEventsSteps.checkEventCardsElements(countOfEventCards);
     }
@@ -37,6 +42,8 @@ public class Test extends Core {
     @org.junit.jupiter.api.Test
     @DisplayName(value = "Event date validation test")
     public void thirdTest() {
+        GlobalNavigationSteps globalNavigationSteps = new GlobalNavigationSteps(webDriver);
+        UpcomingPastEventsSteps upcomingPastEventsSteps = new UpcomingPastEventsSteps(webDriver);
         globalNavigationSteps.openMainPage();
         globalNavigationSteps.navigateToUpcomingEvents();
         upcomingPastEventsSteps.getAllEventsMonthsAsStringAndCompareWithMonthName(Utils.getSystemMonthInMMMFormat());
@@ -45,6 +52,8 @@ public class Test extends Core {
     @org.junit.jupiter.api.Test
     @DisplayName(value = "Canada events dates validation")
     public void fourthTest() {
+        GlobalNavigationSteps globalNavigationSteps = new GlobalNavigationSteps(webDriver);
+        UpcomingPastEventsSteps upcomingPastEventsSteps = new UpcomingPastEventsSteps(webDriver);
         globalNavigationSteps.openMainPage();
         globalNavigationSteps.navigateToPastEvents();
         upcomingPastEventsSteps.chooseCanada();
@@ -58,6 +67,9 @@ public class Test extends Core {
     @org.junit.jupiter.api.Test
     @DisplayName(value = "Detailed event info checks")
     public void fifthTest() {
+        GlobalNavigationSteps globalNavigationSteps = new GlobalNavigationSteps(webDriver);
+        UpcomingPastEventsSteps upcomingPastEventsSteps = new UpcomingPastEventsSteps(webDriver);
+        SingleEventSteps singleEventSteps = new SingleEventSteps(webDriver);
         globalNavigationSteps.openMainPage();
         globalNavigationSteps.navigateToUpcomingEvents();
         upcomingPastEventsSteps.goToFirstEvent();
@@ -67,8 +79,10 @@ public class Test extends Core {
     @org.junit.jupiter.api.Test
     @DisplayName(value = "Video Filtration testing")
     public void sixthTest() {
+        GlobalNavigationSteps globalNavigationSteps = new GlobalNavigationSteps(webDriver);
         globalNavigationSteps.openMainPage();
         globalNavigationSteps.navigateToVideoBlock();
+        AllVideosPageSteps allVideosPageSteps = new AllVideosPageSteps(webDriver);
         allVideosPageSteps.openCloseMoreFilters();
         allVideosPageSteps.chooseLanguageEnglish();
         allVideosPageSteps.chooseLocationBelarus();
@@ -84,16 +98,13 @@ public class Test extends Core {
     @org.junit.jupiter.api.Test
     @DisplayName(value = "Find video reports testing")
     public void seventhTest() {
+        GlobalNavigationSteps globalNavigationSteps = new GlobalNavigationSteps(webDriver);
         globalNavigationSteps.openMainPage();
         globalNavigationSteps.navigateToVideoBlock();
+        AllVideosPageSteps allVideosPageSteps = new AllVideosPageSteps(webDriver);
         allVideosPageSteps.findVideo("QA");
         allVideosPageSteps.validateAllVideosContainsText("QA");
     }
-
-    GlobalNavigationSteps globalNavigationSteps = new GlobalNavigationSteps();
-    UpcomingPastEventsSteps upcomingPastEventsSteps = new UpcomingPastEventsSteps();
-    SingleEventSteps singleEventSteps = new SingleEventSteps();
-    AllVideosPageSteps allVideosPageSteps = new AllVideosPageSteps();
 }
 
 

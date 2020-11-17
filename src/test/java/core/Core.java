@@ -2,12 +2,8 @@ package core;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.openqa.selenium.*;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -19,17 +15,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-//@Execution(ExecutionMode.CONCURRENT)
-public abstract class Core {
+public class Core {
+
+    public WebDriver webDriver;
+    private static Logger logger = LogManager.getLogger(Core.class);
+
+    public Core(WebDriver webDriver) {
+        this.webDriver = webDriver;
+    }
 
     public void getUrl(String url) {
-        try {
-            logger.info("Открываю сайт: " + url);
-            getWebDriver().get(url);
-        } catch (NoSuchSessionException e) {
-            setupDriver();
-            getWebDriver().get(url);
-        }
+        logger.info("Открываю сайт: " + url);
+        webDriver.get(url);
     }
 
     public String getText(By by) {
@@ -63,7 +60,7 @@ public abstract class Core {
 
     public void sendKeys(long timeToWait, By by, String text, Keys keys) {
         getReadyState();
-        WebDriverWait wait = new WebDriverWait(getWebDriver(), timeToWait);
+        WebDriverWait wait = new WebDriverWait(webDriver, timeToWait);
         int maxWaitForAvoidStaleElementException = (int) timeToWait;
         for (int i = 0; i < maxWaitForAvoidStaleElementException; i++) {
             try {
@@ -84,9 +81,9 @@ public abstract class Core {
 
     public void scrollToElement(long timeToWait, By by) {
         getReadyState();
-        WebDriverWait wait = new WebDriverWait(getWebDriver(), timeToWait);
+        WebDriverWait wait = new WebDriverWait(webDriver, timeToWait);
         WebElement webElement = wait.until(ExpectedConditions.presenceOfElementLocated(by));
-        ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].scrollIntoView(true);", webElement);
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", webElement);
     }
 
     public void scrollToElement(By by) {
@@ -95,9 +92,9 @@ public abstract class Core {
 
     public void scrollToElement(long timeToWait, WebElement webElement) {
         getReadyState();
-        WebDriverWait wait = new WebDriverWait(getWebDriver(), timeToWait);
+        WebDriverWait wait = new WebDriverWait(webDriver, timeToWait);
         wait.until(ExpectedConditions.presenceOfElementLocated((By) webElement));
-        ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].scrollIntoView(true);", webElement);
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", webElement);
     }
 
     public void clickWithWait(long timeToWait, By by) {
@@ -111,7 +108,7 @@ public abstract class Core {
     }
 
     private WebElement waitBy(long timeToWait, By by) {
-        WebDriverWait wait = new WebDriverWait(getWebDriver(), timeToWait);
+        WebDriverWait wait = new WebDriverWait(webDriver, timeToWait);
         wait.withMessage("WebElement can't be found by: " + by);
         logger.info("Ждем элемент: " + by);
         wait.until(ExpectedConditions.visibilityOfElementLocated(by));
@@ -130,11 +127,11 @@ public abstract class Core {
 
     public List<WebElement> findAllWebElements(long timeToWait, By by) {
         getReadyState();
-        WebDriverWait wait = new WebDriverWait(getWebDriver(), timeToWait);
+        WebDriverWait wait = new WebDriverWait(webDriver, timeToWait);
         if (waitBy(timeToWait, by) == null) {
             return null;
         } else {
-            return getWebDriver().findElements(by);
+            return webDriver.findElements(by);
         }
     }
 
@@ -144,7 +141,7 @@ public abstract class Core {
 
     public String getText(long timeToWait, By by) {
         getReadyState();
-        WebDriverWait wait = new WebDriverWait(getWebDriver(), timeToWait);
+        WebDriverWait wait = new WebDriverWait(webDriver, timeToWait);
         logger.info("Получение текста для: " + by);
         try {
             return waitBy(timeToWait, by).getText();
@@ -155,7 +152,7 @@ public abstract class Core {
 
     public boolean isElementVisible(By by, long timeToWait) {
         getReadyState();
-        WebDriverWait wait = new WebDriverWait(getWebDriver(), timeToWait);
+        WebDriverWait wait = new WebDriverWait(webDriver, timeToWait);
         try {
             waitStatic((int) timeToWait);
             wait.until(ExpectedConditions.visibilityOfElementLocated(by));
@@ -167,12 +164,11 @@ public abstract class Core {
         }
     }
 
-    public void waitUntilNotExists(By by, long timeToWait){
-        while (timeToWait != 0){
-            if(isElementExists(by, 1L)){
+    public void waitUntilNotExists(By by, long timeToWait) {
+        while (timeToWait != 0) {
+            if (isElementExists(by, 1L)) {
                 timeToWait -= 1;
-            }
-            else {
+            } else {
                 return;
             }
         }
@@ -180,7 +176,7 @@ public abstract class Core {
 
     public boolean isElementExists(By by, long timeToWait) {
         getReadyState();
-        WebDriverWait wait = new WebDriverWait(getWebDriver(), timeToWait);
+        WebDriverWait wait = new WebDriverWait(webDriver, timeToWait);
         try {
             waitStatic((int) timeToWait);
             wait.until(ExpectedConditions.presenceOfElementLocated(by));
@@ -193,7 +189,7 @@ public abstract class Core {
     }
 
     public void getReadyState() {
-        WebDriverWait wait = new WebDriverWait(getWebDriver(), 30);
+        WebDriverWait wait = new WebDriverWait(webDriver, 30);
         wait.until(ExpectedConditions.jsReturnsValue("return document.readyState==\"complete\";"));
     }
 
@@ -206,69 +202,18 @@ public abstract class Core {
     }
 
     public void switchToNewWindowExceptMentioned(String windowToExcept) {
-        Set windowHandles = getWebDriver().getWindowHandles();
+        Set windowHandles = webDriver.getWindowHandles();
         Iterator<String> iterator = windowHandles.iterator();
         while (iterator.hasNext()) {
             String window = iterator.next();
             if (!window.equals(windowToExcept)) {
-                getWebDriver().switchTo().window(window);
+                webDriver.switchTo().window(window);
             }
         }
     }
 
-    public void goBack(){
-        JavascriptExecutor js = (JavascriptExecutor) getWebDriver();
+    public void goBack() {
+        JavascriptExecutor js = (JavascriptExecutor) webDriver;
         js.executeScript("window.history.go(-1)");
-    }
-
-    // ==========================================================================
-    // ==========================================================================
-
-    private static WebDriver webDriver;
-    private static Logger logger = LogManager.getLogger(Core.class);
-
-    @BeforeAll
-    public static void setupDriver() {
-        Platform platform = WebDriverFactory.recognizePlatform(Utils.getSystemVariableValue("browser"));
-        if(platform.equals(Platform.selenoid)){
-            DesiredCapabilities caps = new DesiredCapabilities();
-            caps.setBrowserName("chrome");
-            caps.setVersion("86.0");
-            caps.setCapability("enableVNC", true);
-            caps.setCapability("screenResolution", "1280x1024");
-            caps.setCapability("enableVideo", true);
-            caps.setCapability("enableLog", true);
-            try {
-                webDriver = WebDriverFactory.createDriver(platform, null,
-                        caps, "http://localhost:4444/wd/hub");
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-        }
-        else {
-            try {
-                webDriver = WebDriverFactory.createDriver(platform, null, null, null);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @AfterAll
-    public static void tearDownDriver() {
-        if (webDriver != null) {
-            logger.info("Драйвер выключен");
-            webDriver.quit();
-            webDriver = null;
-            return;
-        }
-        logger.info("Драйвер уже выключен, дополнительное отключение не требуется");
-    }
-
-    public static WebDriver getWebDriver() {
-        if (webDriver == null) {
-            setupDriver();
-        }
-        return webDriver;
     }
 }
