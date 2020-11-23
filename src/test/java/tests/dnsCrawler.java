@@ -29,7 +29,7 @@ public class dnsCrawler extends JunitRunner {
 
         String login = "metallfun@gmail.com";
         String password = "ym-cut-haas";
-        String cardName = "5600";
+        String cardName = "9900Gt";
         boolean isItTrueOrder = false;
         int maxCardPrice = 50000;
 
@@ -47,10 +47,11 @@ public class dnsCrawler extends JunitRunner {
         core.clickWithWait(By.xpath("//h1[@class='title']"));
         core.clickWithWait(By.xpath("//i[@class='location-icon']"));
         core.clickWithWait(By.xpath("//span[@data-role='big-cities']//a[text()='Санкт-Петербург']"));
-        core.isElementVisible(By.xpath("//button[@class='pagination-widget__show-more-btn']"), 10L);
 
         while (!orderIsAlreadyDone) {
             try {
+                core.isElementVisible(By.xpath("//button[@class='pagination-widget__show-more-btn']"), 10L);
+
                 if (core.isElementExists(
                         By.xpath("//div[@class='product-info__title-link']//a[contains(text(), '" + cardName + "')]" +
                                 "/ancestor::div[@class='n-catalog-product ui-button-widget']//button[text()='Купить']"),
@@ -107,12 +108,16 @@ public class dnsCrawler extends JunitRunner {
 
                 } else {
                     System.out.println("Нет удовлетворяющих поиску элементов. Жду. И ищу снова.");
-                    core.waitStatic(10000);
+                    core.waitStatic(5000);
+                    webDriver.get("https://www.dns-shop.ru/catalog/17a89aab16404e77/videokarty/?order=2&groupBy=none&f[19n]=c0l&f[v7]=kncm0&stock=0");
+                    core.waitStatic(5000);
                 }
             }
             catch (Exception e){
                 System.out.println("Непредвиденный программный сбой. Произошла какая-то хуйня. Ждем и повторяем весь цикл снова.");
-                core.waitStatic(10000);
+                core.waitStatic(5000);
+                webDriver.get("https://www.dns-shop.ru/catalog/17a89aab16404e77/videokarty/?order=2&groupBy=none&f[19n]=c0l&f[v7]=kncm0&stock=0");
+                core.waitStatic(5000);
             }
         }
     }
