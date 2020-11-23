@@ -51,11 +51,11 @@ public class Core {
     }
 
     public void sendKeys(By by, String text) {
-        sendKeys(10L, by, text, null);
+        sendKeys(100L, by, text, null);
     }
 
     public void sendKeys(By by, Keys keys) {
-        sendKeys(10L, by, null, keys);
+        sendKeys(100L, by, null, keys);
     }
 
     public void sendKeys(long timeToWait, By by, String text, Keys keys) {
@@ -87,7 +87,7 @@ public class Core {
     }
 
     public void scrollToElement(By by) {
-        scrollToElement(10L, by);
+        scrollToElement(100L, by);
     }
 
     public void scrollToElement(long timeToWait, WebElement webElement) {
@@ -104,21 +104,17 @@ public class Core {
     }
 
     public void clickWithWait(By by) {
-        clickWithWait(10L, by);
+        clickWithWait(100L, by);
     }
 
     private WebElement waitBy(long timeToWait, By by) {
         WebDriverWait wait = new WebDriverWait(webDriver, timeToWait);
         wait.withMessage("WebElement can't be found by: " + by);
         logger.info("Ждем элемент: " + by);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(by));
-        int maxWaitForAvoidStaleElementException = (int) timeToWait;
-        for (int i = 0; i < maxWaitForAvoidStaleElementException; i++) {
+        for (int i = 0; i < 10; i++) {
             try {
                 return wait.until(ExpectedConditions.visibilityOfElementLocated(by));
             } catch (StaleElementReferenceException e) {
-                wait.until(ExpectedConditions.presenceOfElementLocated(by));
-                wait.until(ExpectedConditions.visibilityOfElementLocated(by));
                 waitStatic(1000);
             }
         }
@@ -136,7 +132,7 @@ public class Core {
     }
 
     public List<WebElement> findAllWebElements(By by) {
-        return findAllWebElements(10L, by);
+        return findAllWebElements(100L, by);
     }
 
     public String getText(long timeToWait, By by) {
@@ -189,7 +185,7 @@ public class Core {
     }
 
     public void getReadyState() {
-        WebDriverWait wait = new WebDriverWait(webDriver, 30);
+        WebDriverWait wait = new WebDriverWait(webDriver, 100L);
         wait.until(ExpectedConditions.jsReturnsValue("return document.readyState==\"complete\";"));
     }
 

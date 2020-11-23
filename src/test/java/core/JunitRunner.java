@@ -36,7 +36,6 @@ public class JunitRunner {
         else {
             try {
                 webDriver = WebDriverFactory.createDriver(platform, null, null, null);
-                System.out.println("test");
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
