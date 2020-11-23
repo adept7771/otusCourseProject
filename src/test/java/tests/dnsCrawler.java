@@ -50,70 +50,71 @@ public class dnsCrawler extends JunitRunner {
         core.isElementVisible(By.xpath("//button[@class='pagination-widget__show-more-btn']"), 10L);
 
         while (!orderIsAlreadyDone) {
-            if (core.isElementExists(
-                    By.xpath("//div[@class='product-info__title-link']//a[contains(text(), '" + cardName + "')]" +
-                            "/ancestor::div[@class='n-catalog-product ui-button-widget']//button[text()='Купить']"),
-                    5L)) {
-                System.out.println("\n Найдены удовлетворяющие поиску элементы. Перебираю. \n");
+            try {
+                if (core.isElementExists(
+                        By.xpath("//div[@class='product-info__title-link']//a[contains(text(), '" + cardName + "')]" +
+                                "/ancestor::div[@class='n-catalog-product ui-button-widget']//button[text()='Купить']"),
+                        5L)) {
+                    System.out.println("\n Найдены удовлетворяющие поиску элементы. Перебираю. \n");
 
-                ArrayList<WebElement> cardsWithMatchingNamesAndAvailableForOrder =
-                        (ArrayList<WebElement>) core.findAllWebElements(
-                        By.xpath("//div[@class='product-info__title-link']//a[contains(text(), '" + cardName + "')]/ancestor::div[@class='n-catalog-product ui-button-widget']//button[text()='Купить']/ancestor::div[@class='n-catalog-product ui-button-widget']//div[@class='product-info__title-link']"));
+                    ArrayList<WebElement> cardsWithMatchingNamesAndAvailableForOrder =
+                            (ArrayList<WebElement>) core.findAllWebElements(
+                                    By.xpath("//div[@class='product-info__title-link']//a[contains(text(), '" + cardName + "')]/ancestor::div[@class='n-catalog-product ui-button-widget']//button[text()='Купить']/ancestor::div[@class='n-catalog-product ui-button-widget']//div[@class='product-info__title-link']"));
 
-                System.out.println("\n Найдено " + cardsWithMatchingNamesAndAvailableForOrder.size() + " элементов! А именно: \n");
-                cardsWithMatchingNamesAndAvailableForOrder.forEach(cardFoundName ->{
-                    System.out.println(cardFoundName.getText());
-                });
+                    System.out.println("\n Найдено " + cardsWithMatchingNamesAndAvailableForOrder.size() + " элементов! А именно: \n");
+                    cardsWithMatchingNamesAndAvailableForOrder.forEach(cardFoundName -> {
+                        System.out.println(cardFoundName.getText());
+                    });
 
-                System.out.println("\n");
+                    System.out.println("\n");
 
-                ArrayList<WebElement> matchingCardsPrices =
-                        (ArrayList<WebElement>) core.findAllWebElements(
-                                By.xpath("//div[@class='product-info__title-link']//a[contains(text(), '" + cardName + "')]" +
-                                        "/ancestor::div[@class='n-catalog-product ui-button-widget']" +
-                                        "//button[text()='Купить']/ancestor::div[@data-id='product']" +
-                                        "//div[@class='product-min-price__current']"));
+                    ArrayList<WebElement> matchingCardsPrices =
+                            (ArrayList<WebElement>) core.findAllWebElements(
+                                    By.xpath("//div[@class='product-info__title-link']//a[contains(text(), '" + cardName + "')]" +
+                                            "/ancestor::div[@class='n-catalog-product ui-button-widget']" +
+                                            "//button[text()='Купить']/ancestor::div[@data-id='product']" +
+                                            "//div[@class='product-min-price__current']"));
 
-                ArrayList<WebElement> matchingCardsBuyButtons =
-                        (ArrayList<WebElement>) core.findAllWebElements(
-                                By.xpath("//div[@class='product-info__title-link']//a[contains(text(), '5700')]/ancestor::div[@class='n-catalog-product ui-button-widget']//button[text()='Купить']"));
+                    ArrayList<WebElement> matchingCardsBuyButtons =
+                            (ArrayList<WebElement>) core.findAllWebElements(
+                                    By.xpath("//div[@class='product-info__title-link']//a[contains(text(), '5700')]/ancestor::div[@class='n-catalog-product ui-button-widget']//button[text()='Купить']"));
 
-                System.out.println("\n");
+                    System.out.println("\n");
 
-                for (int i = 0; i < cardsWithMatchingNamesAndAvailableForOrder.size(); i++) {
-                    System.out.println(cardsWithMatchingNamesAndAvailableForOrder.get(i).getText() + " стоит: "
-                            + matchingCardsPrices.get(i).getText());
-                    if (Integer.parseInt(matchingCardsPrices.get(i).getText().replaceAll("[^\\d.]", "")) > maxCardPrice) {
-                        System.out.println("Цена больше " + maxCardPrice + " р. заказ осуществлен не будет. Перехожу к следующему экземпляру");
+                    for (int i = 0; i < cardsWithMatchingNamesAndAvailableForOrder.size(); i++) {
+                        System.out.println(cardsWithMatchingNamesAndAvailableForOrder.get(i).getText() + " стоит: "
+                                + matchingCardsPrices.get(i).getText());
+                        if (Integer.parseInt(matchingCardsPrices.get(i).getText().replaceAll("[^\\d.]", "")) > maxCardPrice) {
+                            System.out.println("Цена больше " + maxCardPrice + " р. заказ осуществлен не будет. Перехожу к следующему экземпляру");
 
-                    }
-                    else {
-                        System.out.println("Цена меньше " + maxCardPrice + " р. переходим к осуществлению заказа");
+                        } else {
+                            System.out.println("Цена меньше " + maxCardPrice + " р. переходим к осуществлению заказа");
 
-                        matchingCardsBuyButtons.get(i).click();
-                        core.clickWithWait(By.xpath("//span[@class='cart-link__icon']"));
-                        core.clickWithWait(By.xpath("//button[@class='one-click-button']"));
+                            matchingCardsBuyButtons.get(i).click();
+                            core.clickWithWait(By.xpath("//span[@class='cart-link__icon']"));
+                            core.clickWithWait(By.xpath("//button[@class='one-click-button']"));
 
-
-                        if(isItTrueOrder){
-                            core.clickWithWait(By.xpath("//button[@class='one-click-init-form-btn-buy']"));
-                            orderIsAlreadyDone = true;
-                            System.out.println("\n Покупка успешно завершена! \n");
+                            if (isItTrueOrder) {
+                                core.clickWithWait(By.xpath("//button[@class='one-click-init-form-btn-buy']"));
+                                orderIsAlreadyDone = true;
+                                System.out.println("\n Покупка успешно завершена! \n");
+                            } else {
+                                System.out.println("\n Мы можем совершить покупку. Но сейчас не в боевом режиме. Ожидаем. \n");
+                                core.waitStatic(500000);
+                            }
                         }
-                        else {
-                            System.out.println("\n Мы можем совершить покупку. Но сейчас не в боевом режиме. Ожидаем. \n");
-                            core.waitStatic(500000);
-                        }
                     }
+
+                } else {
+                    System.out.println("Нет удовлетворяющих поиску элементов. Жду. И ищу снова.");
+                    core.waitStatic(10000);
                 }
-
             }
-            else {
-                System.out.println("Нет удовлетворяющих поиску элементов. Жду. И ищу снова.");
+            catch (Exception e){
+                System.out.println("Непредвиденный программный сбой. Произошла какая-то хуйня. Ждем и повторяем весь цикл снова.");
                 core.waitStatic(10000);
             }
         }
-
     }
 }
 
