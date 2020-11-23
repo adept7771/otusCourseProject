@@ -29,9 +29,9 @@ public class dnsCrawler extends JunitRunner {
 
         String login = "metallfun@gmail.com";
         String password = "ym-cut-haas";
-        String cardName = "9900Gt";
+        String cardName = "5700";
         boolean isItTrueOrder = false;
-        int maxCardPrice = 50000;
+        int maxCardPrice = 43000;
 
         webDriver.get("https://www.dns-shop.ru/catalog/17a89aab16404e77/videokarty/?order=2&groupBy=none&f[19n]=c0l&f[v7]=kncm0&stock=0");
         Core core = new Core(webDriver);
@@ -56,13 +56,13 @@ public class dnsCrawler extends JunitRunner {
                         By.xpath("//div[@class='product-info__title-link']//a[contains(text(), '" + cardName + "')]" +
                                 "/ancestor::div[@class='n-catalog-product ui-button-widget']//button[text()='Купить']"),
                         5L)) {
-                    System.out.println("\n Найдены удовлетворяющие поиску элементы. Перебираю. \n");
+                    System.out.println("\n Найдены удовлетворяющие поиску ( " + cardName + " ) заголовки товаров. Перебираю. \n");
 
                     ArrayList<WebElement> cardsWithMatchingNamesAndAvailableForOrder =
                             (ArrayList<WebElement>) core.findAllWebElements(
                                     By.xpath("//div[@class='product-info__title-link']//a[contains(text(), '" + cardName + "')]/ancestor::div[@class='n-catalog-product ui-button-widget']//button[text()='Купить']/ancestor::div[@class='n-catalog-product ui-button-widget']//div[@class='product-info__title-link']"));
 
-                    System.out.println("\n Найдено " + cardsWithMatchingNamesAndAvailableForOrder.size() + " элементов! А именно: \n");
+                    System.out.println("\n Найдено " + cardsWithMatchingNamesAndAvailableForOrder.size() + " модели, доступных для покупки! А именно: \n");
                     cardsWithMatchingNamesAndAvailableForOrder.forEach(cardFoundName -> {
                         System.out.println(cardFoundName.getText());
                     });
@@ -76,9 +76,16 @@ public class dnsCrawler extends JunitRunner {
                                             "//button[text()='Купить']/ancestor::div[@data-id='product']" +
                                             "//div[@class='product-min-price__current']"));
 
+                    System.out.println("\n Цены на карты: \n ");
+                    matchingCardsPrices.forEach(cardPrice -> {
+                        System.out.println(cardPrice.getText());
+                    });
+
+                    System.out.println("\n\n");
+
                     ArrayList<WebElement> matchingCardsBuyButtons =
                             (ArrayList<WebElement>) core.findAllWebElements(
-                                    By.xpath("//div[@class='product-info__title-link']//a[contains(text(), '5700')]/ancestor::div[@class='n-catalog-product ui-button-widget']//button[text()='Купить']"));
+                                    By.xpath("//div[@class='product-info__title-link']//a[contains(text(), '" + cardName + "')]/ancestor::div[@class='n-catalog-product ui-button-widget']//button[text()='Купить']"));
 
                     System.out.println("\n");
 
@@ -86,14 +93,20 @@ public class dnsCrawler extends JunitRunner {
                         System.out.println(cardsWithMatchingNamesAndAvailableForOrder.get(i).getText() + " стоит: "
                                 + matchingCardsPrices.get(i).getText());
                         if (Integer.parseInt(matchingCardsPrices.get(i).getText().replaceAll("[^\\d.]", "")) > maxCardPrice) {
-                            System.out.println("Цена больше " + maxCardPrice + " р. заказ осуществлен не будет. Перехожу к следующему экземпляру");
+                            System.out.println("Цена больше " + maxCardPrice + " р. заказ осуществлен не будет. Перехожу к следующему экземпляру \n");
 
                         } else {
-                            System.out.println("Цена меньше " + maxCardPrice + " р. переходим к осуществлению заказа");
+                            System.out.println("Цена меньше " + maxCardPrice + " р. переходим к осуществлению заказа \n");
 
                             matchingCardsBuyButtons.get(i).click();
                             core.clickWithWait(By.xpath("//span[@class='cart-link__icon']"));
-                            core.clickWithWait(By.xpath("//button[@class='one-click-button']"));
+                            if (core.isElementVisible(By.xpath("//span[@class='cart-link__icon']"), 10L)){
+                                core.clickWithWait(By.xpath("//button[@class='one-click-button']"));
+                            }
+                            else{
+                                core.clickWithWait(By.xpath("//span[@class='cart-link__icon']"));
+                                core.clickWithWait(By.xpath("//button[@class='one-click-button']"));
+                            }
 
                             if (isItTrueOrder) {
                                 core.clickWithWait(By.xpath("//button[@class='one-click-init-form-btn-buy']"));
@@ -102,22 +115,27 @@ public class dnsCrawler extends JunitRunner {
                             } else {
                                 System.out.println("\n Мы можем совершить покупку. Но сейчас не в боевом режиме. Ожидаем. \n");
                                 core.waitStatic(500000);
+                                orderIsAlreadyDone = true;
                             }
                         }
                     }
+                    System.out.println("Перебор всех элементов закончен. Однако миссия не была выполнена! Перегружаю и инициирую поиск снова.");
+                    core.waitStatic(15000);
+                    webDriver.get("https://www.dns-shop.ru/catalog/17a89aab16404e77/videokarty/?order=2&groupBy=none&f[19n]=c0l&f[v7]=kncm0&stock=0");
+                    core.waitStatic(15000);
 
                 } else {
-                    System.out.println("Нет удовлетворяющих поиску элементов. Жду. И ищу снова.");
-                    core.waitStatic(5000);
+                    System.out.println("Нет удовлетворяющих поиску карт. Жду. И ищу снова.");
+                    core.waitStatic(15000);
                     webDriver.get("https://www.dns-shop.ru/catalog/17a89aab16404e77/videokarty/?order=2&groupBy=none&f[19n]=c0l&f[v7]=kncm0&stock=0");
-                    core.waitStatic(5000);
+                    core.waitStatic(15000);
                 }
             }
             catch (Exception e){
-                System.out.println("Непредвиденный программный сбой. Произошла какая-то хуйня. Ждем и повторяем весь цикл снова.");
-                core.waitStatic(5000);
+                System.out.println("Непредвиденный программный сбой. Произошла какая-то неведомая хрень. Ждем и повторяем весь цикл снова.");
+                core.waitStatic(15000);
                 webDriver.get("https://www.dns-shop.ru/catalog/17a89aab16404e77/videokarty/?order=2&groupBy=none&f[19n]=c0l&f[v7]=kncm0&stock=0");
-                core.waitStatic(5000);
+                core.waitStatic(15000);
             }
         }
     }
