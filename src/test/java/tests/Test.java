@@ -10,7 +10,7 @@ import steps.UpcomingPastEventsSteps;
 import steps.AllVideosPageSteps;
 import utils.Utils;
 
-@Execution(ExecutionMode.CONCURRENT)
+//@Execution(ExecutionMode.CONCURRENT)
 public class Test extends JunitRunner {
 
     @org.junit.jupiter.api.Test

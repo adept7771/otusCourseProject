@@ -51,11 +51,11 @@ public class Core {
     }
 
     public void sendKeys(By by, String text) {
-        sendKeys(10L, by, text, null);
+        sendKeys(20L, by, text, null);
     }
 
     public void sendKeys(By by, Keys keys) {
-        sendKeys(10L, by, null, keys);
+        sendKeys(20L, by, null, keys);
     }
 
     public void sendKeys(long timeToWait, By by, String text, Keys keys) {
@@ -87,7 +87,7 @@ public class Core {
     }
 
     public void scrollToElement(By by) {
-        scrollToElement(10L, by);
+        scrollToElement(20L, by);
     }
 
     public void scrollToElement(long timeToWait, WebElement webElement) {
@@ -104,7 +104,7 @@ public class Core {
     }
 
     public void clickWithWait(By by) {
-        clickWithWait(10L, by);
+        clickWithWait(20L, by);
     }
 
     private WebElement waitBy(long timeToWait, By by) {
@@ -136,7 +136,7 @@ public class Core {
     }
 
     public List<WebElement> findAllWebElements(By by) {
-        return findAllWebElements(10L, by);
+        return findAllWebElements(20L, by);
     }
 
     public String getText(long timeToWait, By by) {
