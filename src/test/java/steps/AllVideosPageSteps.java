@@ -4,6 +4,7 @@ import core.Core;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import pageObjects.AllVideosPage;
@@ -25,19 +26,19 @@ public class AllVideosPageSteps extends Core {
         clickWithWait(allVideosPage.moreFiltersButton);
     }
 
-    public void chooseTestingCategory(){
+    public void chooseVideoCategory(String categoryName){
         clickWithWait(allVideosPage.categoryDropdown);
-        clickWithWait(allVideosPage.testingInDropdown);
+        clickWithWait(By.xpath("//label[@data-value='" + categoryName + "']"));
     }
 
-    public void chooseLocationBelarus(){
+    public void chooseLocation(String locationName){
         clickWithWait(allVideosPage.locationDropdown);
-        clickWithWait(allVideosPage.belarusInDropdown);
+        clickWithWait(By.xpath("//label[@data-value='" + locationName +"']"));
     }
 
-    public void chooseLanguageEnglish(){
+    public void chooseLanguage(String languageName){
         clickWithWait(allVideosPage.languageDropdown);
-        clickWithWait(allVideosPage.englishInDropdown);
+        clickWithWait(By.xpath("//label[@data-value='" + languageName + "']"));
     }
 
     public int countNumberOfVideoHeadings(){

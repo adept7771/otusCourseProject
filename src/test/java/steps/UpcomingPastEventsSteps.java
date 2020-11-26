@@ -4,6 +4,7 @@ import core.Core;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import pageObjects.UpcomingPastEventsPage;
@@ -97,9 +98,9 @@ public class UpcomingPastEventsSteps extends Core {
         return false;
     }
 
-    public void chooseCanada() {
+    public void chooseCountry(String countryName) {
         clickWithWait(upcomingPastEventsPage.locationDropdown);
-        clickWithWait(upcomingPastEventsPage.canadaInDropdown);
+        clickWithWait(By.xpath("//label[@data-value='" + countryName + "']"));
         clickWithWait(upcomingPastEventsPage.allEventsH3Header);
     }
 }

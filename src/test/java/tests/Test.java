@@ -1,6 +1,5 @@
 package tests;
 
-import core.Core;
 import core.JunitRunner;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.Execution;
@@ -18,7 +17,7 @@ public class Test extends JunitRunner {
     @DisplayName(value = "Upcoming events check test")
     public void firstTest() {
         GlobalNavigationSteps globalNavigationSteps = new GlobalNavigationSteps(webDriver);
-        globalNavigationSteps.openMainPage();
+        globalNavigationSteps.openMainPageAndAllowCookies();
         globalNavigationSteps.navigateToUpcomingEvents();
         UpcomingPastEventsSteps upcomingPastEventsSteps = new UpcomingPastEventsSteps(webDriver);
         Assertions.assertEquals(upcomingPastEventsSteps.getChosenTabEventCounterValue(),
@@ -30,7 +29,7 @@ public class Test extends JunitRunner {
     @DisplayName(value = "Event cards check test")
     public void secondTest() {
         GlobalNavigationSteps globalNavigationSteps = new GlobalNavigationSteps(webDriver);
-        globalNavigationSteps.openMainPage();
+        globalNavigationSteps.openMainPageAndAllowCookies();
         globalNavigationSteps.navigateToUpcomingEvents();
         UpcomingPastEventsSteps upcomingPastEventsSteps = new UpcomingPastEventsSteps(webDriver);
         int countOfEventCards = upcomingPastEventsSteps.getUpcomingEventsCardsCount();
@@ -44,7 +43,7 @@ public class Test extends JunitRunner {
     public void thirdTest() {
         GlobalNavigationSteps globalNavigationSteps = new GlobalNavigationSteps(webDriver);
         UpcomingPastEventsSteps upcomingPastEventsSteps = new UpcomingPastEventsSteps(webDriver);
-        globalNavigationSteps.openMainPage();
+        globalNavigationSteps.openMainPageAndAllowCookies();
         globalNavigationSteps.navigateToUpcomingEvents();
         upcomingPastEventsSteps.getAllEventsMonthsAsStringAndCompareWithMonthName(Utils.getSystemMonthInMMMFormat());
     }
@@ -54,9 +53,9 @@ public class Test extends JunitRunner {
     public void fourthTest() {
         GlobalNavigationSteps globalNavigationSteps = new GlobalNavigationSteps(webDriver);
         UpcomingPastEventsSteps upcomingPastEventsSteps = new UpcomingPastEventsSteps(webDriver);
-        globalNavigationSteps.openMainPage();
+        globalNavigationSteps.openMainPageAndAllowCookies();
         globalNavigationSteps.navigateToPastEvents();
-        upcomingPastEventsSteps.chooseCanada();
+        upcomingPastEventsSteps.chooseCountry("Canada");
         Assertions.assertEquals(upcomingPastEventsSteps.getChosenTabEventCounterValue(),
                 upcomingPastEventsSteps.getPastEventsCardsCount(),
                 "There are difference while comparing event counter and event cards");
@@ -70,7 +69,7 @@ public class Test extends JunitRunner {
         GlobalNavigationSteps globalNavigationSteps = new GlobalNavigationSteps(webDriver);
         UpcomingPastEventsSteps upcomingPastEventsSteps = new UpcomingPastEventsSteps(webDriver);
         SingleEventSteps singleEventSteps = new SingleEventSteps(webDriver);
-        globalNavigationSteps.openMainPage();
+        globalNavigationSteps.openMainPageAndAllowCookies();
         globalNavigationSteps.navigateToUpcomingEvents();
         upcomingPastEventsSteps.goToFirstEvent();
         singleEventSteps.checkMainEventBlocksAreExists();
@@ -80,13 +79,13 @@ public class Test extends JunitRunner {
     @DisplayName(value = "Video Filtration testing")
     public void sixthTest() {
         GlobalNavigationSteps globalNavigationSteps = new GlobalNavigationSteps(webDriver);
-        globalNavigationSteps.openMainPage();
+        globalNavigationSteps.openMainPageAndAllowCookies();
         globalNavigationSteps.navigateToVideoBlock();
         AllVideosPageSteps allVideosPageSteps = new AllVideosPageSteps(webDriver);
         allVideosPageSteps.openCloseMoreFilters();
-        allVideosPageSteps.chooseLanguageEnglish();
-        allVideosPageSteps.chooseLocationBelarus();
-        allVideosPageSteps.chooseTestingCategory();
+        allVideosPageSteps.chooseLanguage("ENGLISH");
+        allVideosPageSteps.chooseLocation("Belarus");
+        allVideosPageSteps.chooseVideoCategory("Testing");
         allVideosPageSteps.openCloseMoreFilters();
         Assertions.assertEquals(
                 allVideosPageSteps.countNumberOfLanguageIcons(),
@@ -99,7 +98,7 @@ public class Test extends JunitRunner {
     @DisplayName(value = "Find video reports testing")
     public void seventhTest() {
         GlobalNavigationSteps globalNavigationSteps = new GlobalNavigationSteps(webDriver);
-        globalNavigationSteps.openMainPage();
+        globalNavigationSteps.openMainPageAndAllowCookies();
         globalNavigationSteps.navigateToVideoBlock();
         AllVideosPageSteps allVideosPageSteps = new AllVideosPageSteps(webDriver);
         allVideosPageSteps.findVideo("QA");
