@@ -21,6 +21,7 @@ public class UpcomingPastEventsPage {
     public By eventLanguageCell = By.xpath("//div[contains(@class, 'evnt-events-row')]//div[@class='evnt-card-heading']/div/div[2]/p[@class='language']");
     public By eventHeadingCell = By.xpath("//div[contains(@class, 'evnt-events-row')]//div[@class='evnt-card-wrapper']//div[@class='evnt-card-cell']/div[1]/h1");
     public By eventDateCell = By.xpath("//div[contains(@class, 'evnt-events-row')]//div[@class='evnt-card-wrapper']//div[@class='evnt-card-cell']/div[2]//span[@class='date']");
+    public By eventDateCellThisWeek = By.xpath("//h3[text()='This week']/following-sibling::div[1]//span[@class='date']");
     public By eventRegistrationStatus = By.xpath("//div[contains(@class, 'evnt-events-row')]//div[@class='evnt-card-wrapper']//div[@class='evnt-card-cell']/div[2]//span[1]/following-sibling::span[contains(@class, 'status')]");
     public By eventSpeakers = By.xpath("//div[contains(@class, 'evnt-events-row')]//div[@class='evnt-card-wrapper']//div[3 and @class='evnt-card-footer']//div[@class='speakers-wrapper']");
 }

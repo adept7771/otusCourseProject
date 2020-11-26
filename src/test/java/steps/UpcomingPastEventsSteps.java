@@ -56,7 +56,7 @@ public class UpcomingPastEventsSteps extends Core {
     }
 
     public void getAllEventsMonthsAsStringAndCompareWithMonthName(String monthNameInMMMFormat) {
-        for (WebElement webElement : findAllWebElements(upcomingPastEventsPage.eventDateCell)) {
+        for (WebElement webElement : findAllWebElements(upcomingPastEventsPage.eventDateCellThisWeek)) {
             Assertions.assertEquals(
                     webElement.getText().replaceAll("[^A-Za-z]+", ""),
                     monthNameInMMMFormat,
